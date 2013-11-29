@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <!-- <com.fafadiatech.actionbarlibrary.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" /> -->
+
+    <ViewStub
+        android:id="@+id/vsSubHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inflatedId="@+id/header"
+        android:layout="@layout/subheader_layout" />
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+   <!-- <include layout="@layout/search_bar" />   -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#DEDEDE" >
+
+        <TextView
+            android:id="@+id/txtAddPatient_addapointment"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="+ Add a new patient"
+            android:textColor="#2EA2E2"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/addappointmentList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#EDEDED"
+        android:dividerHeight="1dp"
+        >
+    </ListView>
+
+</LinearLayout>

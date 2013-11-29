@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_screen"
+    android:orientation="vertical" >
+	<ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"	      
+	        android:layout_alignParentTop="true"
+	        android:layout_marginTop="28dp"
+	        android:src="@drawable/uclinx" />
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_below="@+id/image"
+         >
+	
+		
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"            
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:text=""
+            android:hint="login" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtEmail"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:inputType="text|textPassword"
+            android:ems="10"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:text=""
+            android:hint="Password" >
+        </EditText>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/edtPassword"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"
+            android:text="Login"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+     <!--    <TextView
+            android:id="@+id/txtsignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnLogin"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="Sign up for uClinx"
+            android:textColor="#fff"
+            android:textStyle="bold" /> -->
+    </RelativeLayout>
+    <!-- </LinearLayout> -->
+
+    
+
+</RelativeLayout>

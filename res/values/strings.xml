@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Uclinix</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="url_base">http://www.uclinix.in</string>
+    <string name="url_doctor_login">/api/login/</string>
+    <string name="url_appointment_list">/api/appointment_list</string>
+    <string name="url_patient_list">/api/all_patient_list/</string>
+    <string name="url_category_list">/api/category_list/</string>
+    <string name="url_addappointment">/api/appointment_add/</string>
+     <string name="url_appointment_delete">/api/appointment_delete/</string>
+     <string name="url_editappointment">/api/appointment_edit/</string>
+     
+     <string name="url_addpatient">/api/patient_add/</string>
+     <string name="url_editpatient">/api/patient_edit/</string>
+     
+     <string name="url_chngpassword">/api/reset_password/</string>
+    
+    <string name="tab_words">Words</string>
+    <string name="tab_numbers">Numbers</string>
+    
+    <string name="tab_appointment">Appointment</string>
+    <string name="tab_patient">Patient</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="search_bar">search patients to add appointment</string>
+    
+    <string name="ui_menu_search">Search</string>
+    <string name="ui_menu_send">SEND</string>
+    <string name="ui_menu_quit">QuIt</string>
+    
+    <string name="str_btn_choose">Choose Android</string>
+    
+    <string name="edit_item">Edit</string>
+    
+     
+    
+    
+    <string name="json_appointmentlist">[
+   		 {
+        \"date\": \"2013-09-23\",
+        \"appointments\": [
+            {
+                \"id\": 9,
+                \"patient\": \"r s\",
+                \"category\": \"Allergy\",
+                \"start_time\": \"01:19 PM\",
+                \"end_time\": \"02:19 PM\",
+                \"paid\": 0,
+                \"paid_on\": \"2013-09-23\",
+                \"gender\": \"Male\",
+                \"image\": \"../images/18_2.jpg\"
+            },
+            {
+                \"id\": 11,
+                \"patient\": \"ravi pal\",
+                \"category\": \"Allergy\",
+                \"start_time\": \"05:08 PM\",
+                \"end_time\": \"06:08 PM\",
+                \"paid\": 0,
+                \"paid_on\": \"2013-09-23\",
+                \"gender\": \"Female\",
+                \"image\": \"../images/18.jpg\"
+            }
+        ]
+    },
+    {
+        \"date\": \"2013-09-24\",
+        \"appointments\": [
+            {
+                \"id\": 12,
+                \"patient\": \"ravi pal\",
+                \"category\": \"Allergy\",
+                \"start_time\": \"05:09 PM\",
+                \"end_time\": \"06:09 PM\",
+                \"paid\": 0,
+                \"paid_on\": \"2013-09-23\",
+                \"gender\": \"Female\",
+                \"image\": \"../images/18.jpg\"
+            }
+        ]
+    },
+    {
+        \"date\": \"2013-09-25\",
+        \"appointments\": [
+            {
+                \"id\": 10,
+                \"patient\": \"r s\",
+                \"category\": \"Allergy\",
+                \"start_time\": \"12:19 PM\",
+                \"end_time\": \"01:19 PM\",
+                \"paid\": 0,
+                \"paid_on\": \"2013-09-23\",
+                \"gender\": \"Male\",
+                \"image\": \"../images/18_2.jpg\"
+            }
+        ]
+     }
+	]
+	</string>
+    
+</resources>

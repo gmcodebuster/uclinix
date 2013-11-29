@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/tabsLayout" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/tab_bg_selector"
+	android:gravity="center" android:orientation="vertical">
+
+    <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:id="@+id/tab_icon" />
+    <TextView 
+        android:id="@+id/tab_name" android:layout_width="fill_parent" android:layout_height="wrap_content"
+        style="?android:attr/tabWidgetStyle" android:textColor="@android:color/tab_indicator_text"
+       android:gravity="center_horizontal"
+       
+        />
+</LinearLayout>
+

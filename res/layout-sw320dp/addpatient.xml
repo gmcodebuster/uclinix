@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/LinearLayout1"
+              android:layout_width="fill_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp" >
+ <ScrollView 
+     android:layout_height="wrap_content"
+     android:layout_width="fill_parent"
+     >     
+ 
+  <LinearLayout
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"          
+          android:orientation="vertical"
+          android:padding="5dp" >
+ 
+      
+   <TextView 
+       android:id="@+id/txt_username"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Username"
+       />   
+      <EditText 
+          android:id="@+id/edt_username"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter Username"
+          />
+      
+        <TextView 
+       android:id="@+id/txt_password"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Enter password"
+       />   
+      <EditText 
+          android:id="@+id/edt_password"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter password"    
+          android:password="true"      
+          />
+      
+   <TextView 
+       android:id="@+id/txt_firstname"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="First Name"
+       />   
+      <EditText 
+          android:id="@+id/edt_firstname"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter User first name"
+          />
+
+         <TextView 
+       android:id="@+id/txt_secondname"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Last Name"
+       />   
+      <EditText 
+          android:id="@+id/edt_secondname"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter User last name"
+          />
+         <TextView 
+       android:id="@+id/txt_email"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Email"
+       />   
+      <EditText 
+          android:id="@+id/edt_email"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter User email"
+          android:inputType="textEmailAddress"
+          />
+      
+         <TextView 
+       android:id="@+id/txt_address"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Address"
+       />   
+      <EditText 
+          android:id="@+id/edt_address"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter User home address"
+          android:lines="5"
+          android:maxLines="5"
+		  android:gravity="top|left"
+          android:inputType="textPostalAddress|textMultiLine"
+          />
+      
+         <TextView 
+       android:id="@+id/txt_landline"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Landline no."
+       />   
+      <EditText 
+          android:id="@+id/edt_landline"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter landline no."
+          android:phoneNumber="true"          
+          android:inputType="number"
+          android:maxLength="10"
+          />
+      
+        <TextView 
+       android:id="@+id/txt_mobileno"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Mobile no."
+       
+       />   
+      <EditText 
+          android:id="@+id/edt_mobileno"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Enter mobile no."
+          android:phoneNumber="true"
+          android:inputType="numberSigned"
+          android:maxLength="10"
+          />
+        <TextView 
+       android:id="@+id/txt_dob"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Date of birth"
+       />   
+      <Button 
+          android:id="@+id/edt_dob"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Select date of birth"  
+                 
+          />
+      
+        <TextView 
+       android:id="@+id/txt_gender"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:text="Gender"
+       />   
+      <Button 
+          android:id="@+id/edt_gender"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:hint="Select gender"          
+          />
+      
+       <ImageView
+            android:id="@+id/viewImage"
+            android:layout_width="72px"
+            android:layout_height="72px"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+           
+            android:src="@drawable/ic_launcher" />
+      
+    <Button
+            android:id="@+id/btnSelectPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Photo" />
+    
+    <LinearLayout 
+        android:id="@+id/linlay"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"       
+        >
+ 
+   
+    
+    <Button 
+        android:id="@+id/btnCan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_weight="1"
+        android:padding="5dp"
+        
+        />
+    
+     <Button android:id="@+id/btnOk"
+     		android:layout_width="0dp"
+     		android:layout_height="wrap_content"
+     		android:text="Ok"
+     		android:layout_weight="1"
+     		android:padding="5dp"     
+     />
+     
+    </LinearLayout>    
+  </LinearLayout>
+ </ScrollView>
+    
+ 
+</LinearLayout> 
+

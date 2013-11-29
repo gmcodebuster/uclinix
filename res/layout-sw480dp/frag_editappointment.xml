@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	<LinearLayout 
+           android:layout_width="fill_parent"
+    	   android:layout_height="0dp"
+    	   android:orientation="vertical"
+    	   android:layout_weight="8" >
+   <ScrollView 
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"           
+       >
+       <LinearLayout 
+           android:layout_width="match_parent"
+    	   android:layout_height="match_parent"
+    	   android:orientation="vertical" >
+    	   
+		       <TextView android:id="@+id/txt_patient_name1"
+		        android:layout_height="wrap_content"
+		        android:layout_width="fill_parent"       
+		        android:text="Patient"
+		        />
+	        <LinearLayout 
+	           android:layout_width="match_parent"
+	    	   android:layout_height="match_parent"
+	    	   android:orientation="horizontal" >
+	    	   
+	            
+	    <TextView android:id="@+id/txt_patient_name"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"	        
+	        
+	        android:layout_marginBottom="5dp"
+	        />
+	    <!-- <Button
+	        android:id="@+id/btn_patient"
+	        android:layout_height="wrap_content"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:text="change"      
+	            /> -->
+	    </LinearLayout>
+	    
+	        
+	        
+	<TextView 
+	    android:id="@+id/txt_category_name1"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="Category"/>
+	<LinearLayout 
+	           android:layout_width="match_parent"
+	    	   android:layout_height="match_parent"
+	    	   android:orientation="horizontal" >
+	            
+	<TextView 
+	    android:id="@+id/txt_category_name"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        />
+    <Button 
+        android:id="@+id/btn_category"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="Change"
+        />
+    </LinearLayout>
+    
+	
+    <TextView android:id="@+id/txt_startdate1"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="Appointment Date"/>
+    
+    <LinearLayout 
+	           android:layout_width="match_parent"
+	    	   android:layout_height="match_parent"
+	    	   android:orientation="horizontal" >
+    <TextView android:id="@+id/txt_startdate"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        />
+    
+    <Button 
+        android:id="@+id/btn_startdate"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="Change"
+        />    
+    </LinearLayout>`
+    
+    
+    <TextView android:id="@+id/txt_starttime1"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="Appointment start time"/>    
+    
+    <LinearLayout 
+	           android:layout_width="match_parent"
+	    	   android:layout_height="match_parent"
+	    	   android:orientation="horizontal" >
+    <TextView android:id="@+id/txt_starttime"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        />  
+     <Button 
+        android:id="@+id/btn_starttime"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="Change"
+        />    
+   </LinearLayout>
+   
+     <TextView android:id="@+id/txt_endtime1"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="Appointment duration"/>    
+    
+     <LinearLayout 
+	           android:layout_width="match_parent"
+	    	   android:layout_height="match_parent"
+	    	   android:orientation="horizontal" >
+     
+       <TextView android:id="@+id/txt_endtime"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        />    
+     <Button 
+        android:id="@+id/btn_durtime"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="change"
+        />
+      </LinearLayout>
+     </LinearLayout>
+ </ScrollView>  
+</LinearLayout>
+
+ <LinearLayout 
+     android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:orientation="horizontal"
+    android:layout_weight="1"
+    android:weightSum="100"
+     >
+   
+   <Button 
+       android:id="@+id/btn_cancel"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="50"
+        android:text="Cancel"/>
+   
+   <Button 
+       android:id="@+id/btn_ok"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="50"
+        android:text="Edit"/>
+ 	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,479 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+
+</RelativeLayout>
+
+<!-- You can refer to this doc Supporting Multiple Screens
+
+320dp: a typical phone screen (240x320 ldpi, 320x480 mdpi, 480x800 hdpi, etc).
+480dp: a tweener tablet like the Streak (480x800 mdpi).
+600dp: a 7” tablet (600x1024 mdpi).
+720dp: a 10” tablet (720x1280 mdpi, 800x1280 mdpi, etc).
+And for layout and drawables you can define this way
+
+res/layout/my_layout.xml             // layout for normal screen size ("default")
+res/layout-small/my_layout.xml       // layout for small screen size
+res/layout-large/my_layout.xml       // layout for large screen size
+res/layout-xlarge/my_layout.xml      // layout for extra large screen size
+res/layout-xlarge-land/my_layout.xml // layout for extra large in landscape orientation
+
+res/drawable-mdpi/my_icon.png        // bitmap for medium density
+res/drawable-hdpi/my_icon.png        // bitmap for high density
+res/drawable-xhdpi/my_icon.png       // bitmap for extra high density 
+
+5. Create folders namely as given below :
+
+res/layout-small : Devices with screens having at least a resolution of 426dp x 320dp will make use the layouts defined in this folder
+res/layout-normal : Devices with screens having at least a resolution of 470dp x 320dp will make use the layouts defined in this folder
+res/layout-large : Devices with screens having at least a resolution of 640dp x 480dp will make use the layouts defined in this folder
+res/layout-xlarge : Devices with screens having at least a resolution of 960dp x 720dp will make use the layouts defined in this folder
+res/layout-sw320dp : Devices with a smallest screen width which is greater than 320dp will make use the layouts defined in this folder
+res/layout-sw480dp: Devices with a smallest screen width which is greater than 480dp will make use the layouts defined in this folder
+
+Typical phone – 320dp: a typical phone
+
+A 5” tablet / “tweener” device – 480dp: such as the Samsung Note
+
+A 7” tablet – 600dp: such as the Barnes & Noble Nook
+
+A 10” tablet – 720dp: such as the Motorola Xoom
+
+The following is a comparison of how the older pre-API Level 13 screen size qualifiers compare to density-independent pixels:
+
+426dp x 320dp is small
+
+470dp x 320dp is normal
+
+640dp x 480dp is large
+
+960dp x 720dp is xlarge
+
+Density
+Android name
+Small	around 120dpi (ldpi)
+Normal	around 160dpi (mdpi)
+High	around 240dpi (hdpi)
+x-High	around 320dpi (xhdpi)
+
+Density 1.0 (~ 140-180 dpi):
+Archos A70: 7", 800x480. ~ 140 dpi 
+Xoom: 10.1", 1280x800, ~ 160 dpi 
+Galaxy Tab: 7", 1024x600, ~ 170 dpi
+
+Density 1.5 (~ 180-275 dpi):
+Galaxy Tab 7.7: 1280x800, ~ 200 dpi 
+Galaxy SGS: 4", 800x480, ~ 240 dpi 
+Motorola Droid RAZR: 4.3", 960x540, ~ 240 dpi 
+Motorola Defy: 3.6", 854x480, ~ 275 dpi
+
+Density 2.0 (~ 275+ dpi):
+Galaxy Note (5.3", ~4.75"x2.75"): 1280x800, ~ 280 dpi 
+Galaxy Nexus (4.65", ~4"x2.3"): 720x1184, ~ 312 dpi 
+Galaxy Nexus (landscape): 1196x720
+
+
+Tablet	 Generalized Density	 Actual Density
+Kindle Fire 
+(1st Generation)	mdpi 
+(approximately 160DPI)	 169dpi
+Kindle Fire 
+(2nd Generation)	mdpi 
+(approximately 160DPI)	 169dpi
+Kindle Fire HD 7"	hdpi 
+(approximately 240DPI)	 216dpi
+Kindle Fire HD 8.9"	hdpi 
+(approximately 240DPI)	 254dpi
+
+Red Button selector
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape>
+            <solid
+               android:color="#ef4444" />
+            <stroke
+               android:width="1dp"
+               android:color="#992f2f" />
+            <corners
+               android:radius="3dp" />
+            <padding
+               android:left="10dp"
+               android:top="10dp"
+               android:right="10dp"
+               android:bottom="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient
+               android:startColor="#ef4444"
+               android:endColor="#992f2f"
+               android:angle="270" />
+            <stroke
+               android:width="1dp"
+               android:color="#992f2f" />
+            <corners
+               android:radius="3dp" />
+            <padding
+               android:left="10dp"
+               android:top="10dp"
+               android:right="10dp"
+               android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>
+
+Button selector
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape>
+            <solid
+               android:color="#343434" />
+            <stroke
+               android:width="1dp"
+               android:color="#171717" />
+            <corners
+               android:radius="3dp" />
+            <padding
+               android:left="10dp"
+               android:top="10dp"
+               android:right="10dp"
+               android:bottom="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient
+               android:startColor="#343434"
+               android:endColor="#171717"
+               android:angle="270" />
+            <stroke
+               android:width="1dp"
+               android:color="#171717" />
+            <corners
+               android:radius="4dp" />
+            <padding
+               android:left="10dp"
+               android:top="10dp"
+               android:right="10dp"
+               android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>
+
+
+ set background="@drawable/custom_button"
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true" >
+        <shape>
+            <gradient
+                android:startColor="@color/yellow1"
+                android:endColor="@color/yellow2"
+                android:angle="270" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/grey05" />
+            <corners
+                android:radius="3dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true" >
+        <shape>
+            <gradient
+                android:endColor="@color/orange4"
+                android:startColor="@color/orange5"
+                android:angle="270" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/grey05" />
+            <corners
+                android:radius="3dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item>        
+        <shape>
+            <gradient
+                android:endColor="@color/blue2"
+                android:startColor="@color/blue25"
+                android:angle="270" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/grey05" />
+            <corners
+                android:radius="3dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>
+
+
+
+
+
+
+
+Another option is to use the services of a third party testing service. These services will take an APK, run it on many different devices, and then provide feedback how the application worked.
+
+Apkudo
+
+The Beta Family
+
+Perfecto Mobile
+
+
+Login
+
+{
+    "token": "9057ecf0992043d4887a78a54d221d1561d84be2",
+    "id": 17
+}
+
+appointment list
+
+		<name>
+		<alergy>
+<photo>	start time  <time>
+		End time	<time>
+
+[
+    {
+        "date": "2013-09-23",
+        "appointments": [
+            {
+                "id": 9,
+                "patient": "r s",
+                "category": "Allergy",
+                "start_time": "01:19 PM",
+                "end_time": "02:19 PM",
+                "paid": 0,
+                "paid_on": "2013-09-23",
+                "gender": "Male",
+                "image": "../images/18_2.jpg"
+            },
+            {
+                "id": 11,
+                "patient": "ravi pal",
+                "category": "Allergy",
+                "start_time": "05:08 PM",
+                "end_time": "06:08 PM",
+                "paid": 0,
+                "paid_on": "2013-09-23",
+                "gender": "Female",
+                "image": "../images/18.jpg"
+            }
+        ]
+    },
+    {
+        "date": "2013-09-24",
+        "appointments": [
+            {
+                "id": 12,
+                "patient": "ravi pal",
+                "category": "Allergy",
+                "start_time": "05:09 PM",
+                "end_time": "06:09 PM",
+                "paid": 0,
+                "paid_on": "2013-09-23",
+                "gender": "Female",
+                "image": "../images/18.jpg"
+            }
+        ]
+    },
+    {
+        "date": "2013-09-25",
+        "appointments": [
+            {
+                "id": 10,
+                "patient": "r s",
+                "category": "Allergy",
+                "start_time": "12:19 PM",
+                "end_time": "01:19 PM",
+                "paid": 0,
+                "paid_on": "2013-09-23",
+                "gender": "Male",
+                "image": "../images/18_2.jpg"
+            }
+        ]
+    }
+]
+
+patient list
+
+		<name>
+<photo>	<email>
+		<mobile>
+
+[
+    {
+        "id": 14,
+        "username": "patient10",
+        "first_name": "r",
+        "last_name": "s",
+        "email": "rohan@fafadiatech.com",
+        "address": "asd",
+        "landline": "3210654987",
+        "mobile": "9632014587",
+        "dob": "1985-09-10",
+        "gender": "Male",
+        "image": "../images/18_2.jpg"
+    },
+    {
+        "id": 16,
+        "username": "patient11",
+        "first_name": "ravi",
+        "last_name": "pal",
+        "email": "yogesh.neman@fafadiatech.com",
+        "address": "asd ",
+        "landline": "3210654987",
+        "mobile": "6549873210",
+        "dob": "1985-09-11",
+        "gender": "Female",
+        "image": "../images/18.jpg"
+    }
+]
+
+
+
+//make web request with these parameters
+/**
+ * HTTP request types
+ */
+public static final int POST_TYPE   = 1;
+public static final int GET_TYPE    = 2;
+public static final int PUT_TYPE    = 3;
+public static final int DELETE_TYPE = 4;
+
+/**
+ * HTTP request header constants
+ */
+public static final String CONTENT_TYPE         = "Content-Type";
+public static final String ACCEPT_ENCODING      = "Accept-Encoding";
+public static final String CONTENT_ENCODING     = "Content-Encoding";
+public static final String ENCODING_GZIP        = "gzip";
+public static final String MIME_FORM_ENCODED    = "application/x-www-form-urlencoded";
+public static final String MIME_TEXT_PLAIN      = "text/plain";
+
+private InputStream performRequest(final String contentType, final String url, final String user, final String pass,
+    final Map<String, String> headers, final Map<String, String> params, final int requestType) 
+            throws IOException {
+
+    DefaultHttpClient client = HTTPClientFactory.newClient();
+
+    client.getParams().setParameter(HttpProtocolParams.USER_AGENT, mUserAgent);
+
+    // add user and pass to client credentials if present
+    if ((user != null) && (pass != null)) {
+        client.getCredentialsProvider().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(user, pass));
+    }
+
+    // process headers using request interceptor
+    final Map<String, String> sendHeaders = new HashMap<String, String>();
+    if ((headers != null) && (headers.size() > 0)) {
+        sendHeaders.putAll(headers);
+    }
+    if (requestType == HTTPRequestHelper.POST_TYPE || requestType == HTTPRequestHelper.PUT_TYPE ) {
+        sendHeaders.put(HTTPRequestHelper.CONTENT_TYPE, contentType);
+    }
+    // request gzip encoding for response
+    sendHeaders.put(HTTPRequestHelper.ACCEPT_ENCODING, HTTPRequestHelper.ENCODING_GZIP);
+
+    if (sendHeaders.size() > 0) {
+        client.addRequestInterceptor(new HttpRequestInterceptor() {
+
+            public void process(final HttpRequest request, final HttpContext context) throws HttpException,
+                IOException {
+                for (String key : sendHeaders.keySet()) {
+                    if (!request.containsHeader(key)) {
+                        request.addHeader(key, sendHeaders.get(key));
+                    }
+                }
+            }
+        });
+    }
+
+    //.... code omitted ....//
+words most powerful
+xplane 10 simulator
+http://arfeenkhan.com/
+http://www.gamasutra.com/topic/smartphone-tablet
+http://www.drdobbs.com/architecture-and-design/android-on-x86-understanding-android-dev/240161434
+
+QR navigation Robotics
+micromouse
+
+http://www.c99.org/2010/01/23/writing-an-android-sync-provider-part-1/
+http://www.c99.org/2010/01/23/writing-an-android-sync-provider-part-2/
+https://github.com/c99koder/lastfm-android/
+https://github.com/c99koder/AndroidSyncProviderDemo
+https://code.google.com/p/iosched/source/browse/#svn%2Ftrunk%2Fsrc%2Fcom%2Fgoogle%2Fandroid%2Fapps%2Fiosched%2Fio
+http://datadroid.foxykeep.com/
+http://www.codeproject.com/Articles/429997/Sample-Implementation-of-Virgil-Dobjanschis-Rest-p
+
+http://blog.appaloosa-store.com/category/android-development-tutorial/
+
+http://www.androidpolice.com/2012/09/26/google-play-services-can-now-be-installed-manually-from-the-play-store/
+
+http://www.androidhub4you.com/2013/04/google-cloud-messaging-example-in.html
+
+https://github.com/googlecast/cast-android-tictactoe/blob/master/INSTALL_CAST_ECLIPSE.txt
+
+Zomato.com
+states match center 
+Prey project github
+centenus android app
+Google webdesigner utube channel
+
+http://docs.huihoo.com/android/3.0/resources/samples/ApiDemos/src/com/example/android/apis/app/ActionBarMechanics.html
+http://androiddev.ir/resources/samples/Support4Demos/src/com/example/android/supportv4/app/index.html
+
+
+actionbar video
+http://www.youtube.com/watch?v=6TGgYqfJnyc&feature=youtu.be
+http://antonioleiva.com/actionbarcompat-how-to-use/
+http://www.grokkingandroid.com/adding-action-items-from-within-fragments/
+http://androiduiux.com/page/6/
+http://www.grokkingandroid.com/actionviews-sample-app-is-on-bitbucket/
+http://www.coderzheaven.com/2012/10/08/dynamically-adding-removing-toggling-removing-actionbar-tabs-android-part-2/
+http://www.cs.dartmouth.edu/~campbell/cs65/lecture08/lecture08.html
+https://www.udemy.com/pimpyourapp/
+http://kirill-poletaev.blogspot.in/2013/01/android-beginner-tutorial-part-41.html
+http://www.dreamincode.net/forums/topic/303248-popupmenu-contextmenu-and-custom-popupwindow-all-in-one/
+http://www.codeproject.com/Articles/521455/Quick-action-pattern-in-Android-and-simple-impleme
+http://iamvijayakumar.blogspot.in/2011/11/android-quick-action-bar.html
+http://www.edumobile.org/android/android-apps/quick-action-demo/
+
+ ContentObserver
+}
+-->
