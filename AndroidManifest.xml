@@ -26,6 +26,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:debuggable="true"
          >
         <activity
             android:name="com.example.uclinix.LoginActivity"

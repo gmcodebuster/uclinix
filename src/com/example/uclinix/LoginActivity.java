@@ -7,15 +7,20 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,6 +39,7 @@ public class LoginActivity extends FragmentActivity {
 		ConnectionDetector cd;
 	 Context ctx;
 	final String LOG_TAG = "LoginActivity : ";
+	private NetworkChangeReceiver receiver;
 	
 	AlertDialog alert;
 	@Override
@@ -47,6 +53,11 @@ public class LoginActivity extends FragmentActivity {
 		// get Internet status
 		isInternetPresent = cd.isConnectingToInternet();
 		
+		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+		  receiver = new NetworkChangeReceiver();
+		  registerReceiver(receiver, filter);
+		  
+		  
 		if(ApplicationActivity.isLogin()){
 			Intent i1 = new Intent(LoginActivity.this,AppMainFragmentActivity.class);
 			startActivity(i1);
@@ -245,4 +256,52 @@ public class LoginActivity extends FragmentActivity {
 	
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		 Log.v(LOG_TAG, "onDestory");
+		super.onDestroy();
+	
+		unregisterReceiver(receiver);
+	}
+	
+	public class NetworkChangeReceiver extends BroadcastReceiver {
+		  
+		  @Override
+		  public void onReceive(final Context context, final Intent intent) {
+		  
+		   Log.v(LOG_TAG, "Receieved notification about network status");
+		   isNetworkAvailable(context);
+		  
+		  }
+		  
+		  
+		  private boolean isNetworkAvailable(Context context) {
+		   ConnectivityManager connectivity = (ConnectivityManager)
+		     context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		   if (connectivity != null) {
+		    NetworkInfo[] info = connectivity.getAllNetworkInfo();
+		    if (info != null) {
+		     for (int i = 0; i < info.length; i++) {
+		      if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+		       if(!isInternetPresent){
+		        Log.v(LOG_TAG, "Now you are connected to Internet!");
+//		        networkStatus.setText("Now you are connected to Internet!");
+		        isInternetPresent = true;
+		        //do your processing here ---
+		        //if you need to post any data to the server or get status
+		        //update from the server
+		       }
+		       return true;
+		      }
+		     }
+		    }
+		   }
+		   Log.v(LOG_TAG, "You are not connected to Internet!");
+//		   networkStatus.setText("You are not connected to Internet!");
+		   isInternetPresent = false;
+		   return false;
+		  }
+		 }
 }

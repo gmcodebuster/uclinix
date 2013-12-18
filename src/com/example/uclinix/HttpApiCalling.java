@@ -20,10 +20,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.params.ConnManagerPNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
 
@@ -34,6 +36,18 @@ import com.example.multipart.content.StringBody;
 import android.util.Log;
 
 public class HttpApiCalling {
+	
+	// the timeout until a connection is established
+	private static final int CONNECTION_TIMEOUT = 5000; /* 5 seconds */
+	
+	// the timeout for waiting for data
+	private static final int SOCKET_TIMEOUT = 5000; /* 5 seconds */
+
+	// ----------- this is the one I am talking about:
+	// the timeout until a ManagedClientConnection is got 
+	// from ClientConnectionRequest
+	private static final long MCC_TIMEOUT = 5000; /* 5 seconds */
+	
 
 	private static DefaultHttpClient client;
 	/*
@@ -65,6 +79,10 @@ public class HttpApiCalling {
 		ClientConnectionManager mgr = client.getConnectionManager();
 
 		HttpParams params = client.getParams();
+		params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 
+		        CONNECTION_TIMEOUT);
+		    params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
+		    params.setLongParameter(ConnManagerPNames.TIMEOUT, MCC_TIMEOUT);
 		client = new DefaultHttpClient(new ThreadSafeClientConnManager(params,
 				mgr.getSchemeRegistry()), params);
 
@@ -105,8 +123,8 @@ public class HttpApiCalling {
 
 		HttpParams params = new BasicHttpParams();
 		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-				HttpVersion.HTTP_1_1);
-
+				HttpVersion.HTTP_1_1);			
+		
 		HttpPost httppost = new HttpPost(url);
 		System.out.println("Login url >>"+url);
 
