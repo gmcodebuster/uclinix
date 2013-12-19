@@ -1,5 +1,6 @@
 package com.example.uclinix;
 
+import org.acra.ACRA;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +92,8 @@ public class LoginActivity extends FragmentActivity {
 				// TODO Auto-generated method stub
 //				Intent i1 = new Intent(LoginActivity.this,AppMainFragmentActivity.class);
 //				startActivity(i1);
+				
+				Button b = (Button) findViewById(R.id.edtEmail);
 				System.out.println("email >> "+edtLogin.getText().toString()+" pass >>"+edtPassword.getText().toString());
 				if(isInternetPresent){
 					new LoginAsync().execute(edtLogin.getText().toString().trim(), edtPassword.getText().toString().trim());
@@ -198,6 +201,7 @@ public class LoginActivity extends FragmentActivity {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				ACRA.getErrorReporter().handleException(e);
 			}
 		}//response is 200
 		if(response[0].equalsIgnoreCase("400")){		
@@ -213,6 +217,7 @@ public class LoginActivity extends FragmentActivity {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				ACRA.getErrorReporter().handleException(e);
 			}
 		}//response is 400
 		}//response is null

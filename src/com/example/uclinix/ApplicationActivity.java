@@ -2,6 +2,8 @@ package com.example.uclinix;
 
 import java.io.File;
 
+import org.acra.annotation.ReportsCrashes;
+
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -22,9 +24,27 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.util.Config;
 import android.widget.Toast;
+import org.acra.*;
+import org.acra.annotation.*;
 
-
+@ReportsCrashes(
+	    formKey = "", //required for backward compatibility but not used
+	    mailTo = "gaurav.mehta@fafadiatech.com", //in case of sending Crash to an email address, by default it's blank implicitly  
+	    logcatArguments = { "-t", "10000", "-v", "long", "ActivityManager:I", "MyApp:D", "*:S" },
+	    /*customize data to send in crash report */
+	    customReportContent = {
+	    ReportField.APP_VERSION_CODE,
+	    ReportField.APP_VERSION_NAME,
+	    ReportField.ANDROID_VERSION,
+	    ReportField.PHONE_MODEL,
+	    ReportField.CUSTOM_DATA,
+	    ReportField.STACK_TRACE,
+	    ReportField.LOGCAT }, 
+	    mode = ReportingInteractionMode.TOAST,
+	    resToastText = R.string.crash_toast_text,
+	    formUri = "http://www.backendofyourchoice.com/reportpath")   //put backend path on which you want to send crash report
 public class ApplicationActivity extends Application {
+	
 	
 	Context ctx;	
 	private final String SAMPLE_DB_NAME = "TheftData";
@@ -52,6 +72,9 @@ public class ApplicationActivity extends Application {
 			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyDeath().build());
 		}*/
 				
+		// The following line triggers the initialization of ACRA
+        ACRA.init(this);
+        
 		super.onCreate();
 		
 		ctx = this;	
