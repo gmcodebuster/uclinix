@@ -1,11 +1,17 @@
 package com.example.uclinix;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import org.acra.ACRA;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -18,12 +24,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -58,7 +67,7 @@ public class LoginActivity extends FragmentActivity {
 		  receiver = new NetworkChangeReceiver();
 		  registerReceiver(receiver, filter);
 		  
-		  
+		  Log.d("UCLINX LoginActivity >> ","OnCreate called");
 		if(ApplicationActivity.isLogin()){
 			Intent i1 = new Intent(LoginActivity.this,AppMainFragmentActivity.class);
 			startActivity(i1);
@@ -66,7 +75,20 @@ public class LoginActivity extends FragmentActivity {
 		}
 		
 		
+		
 		setContentView(R.layout.activity_login);
+		
+		try {
+		    File filename = new File(Environment.getExternalStorageDirectory()+"/logfile_uclinix.log"); 
+		    filename.createNewFile(); 
+		    String cmd = "logcat -d -f -v time"+filename.getAbsolutePath();
+		    Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		
+		
 		edtLogin = (EditText) findViewById(R.id.edtEmail);
 		edtPassword = (EditText) findViewById(R.id.edtPassword);
 		
@@ -92,8 +114,17 @@ public class LoginActivity extends FragmentActivity {
 				// TODO Auto-generated method stub
 //				Intent i1 = new Intent(LoginActivity.this,AppMainFragmentActivity.class);
 //				startActivity(i1);
-				
-				Button b = (Button) findViewById(R.id.edtEmail);
+				Log.d("UCLINX LoginActivity >> ","BUTTON CLICK");
+//				try {
+//				    File filename = new File(Environment.getExternalStorageDirectory()+"/logfile_uclinix.txt"); 
+//				    filename.createNewFile(); 
+//				    String cmd = "logcat -d -f "+filename.getAbsolutePath();
+//				    Runtime.getRuntime().exec(cmd);
+//				} catch (IOException e) {
+//				    // TODO Auto-generated catch block
+//				    e.printStackTrace();
+//				}
+				Log.d("UCLINX LoginActivity >> ","email >> "+edtLogin.getText().toString()+" pass >>"+edtPassword.getText().toString());
 				System.out.println("email >> "+edtLogin.getText().toString()+" pass >>"+edtPassword.getText().toString());
 				if(isInternetPresent){
 					new LoginAsync().execute(edtLogin.getText().toString().trim(), edtPassword.getText().toString().trim());
@@ -129,6 +160,7 @@ public class LoginActivity extends FragmentActivity {
 				
 				// get Internet status
 				isInternetPresent = cd.isConnectingToInternet();
+				
 	}
 	
 	private Context getDialogContext() {
@@ -186,11 +218,15 @@ public class LoginActivity extends FragmentActivity {
 			spassword = params[1];
 			
 			String url_login = getDialogContext().getResources().getString(R.string.url_base)+getDialogContext().getResources().getString(R.string.url_doctor_login);
+			 Log.d("UCLINX LoginActivity >> ",url_login);
 			response = HttpApiCalling.LoginUser(url_login,susername, spassword,"android","qwertyuiopasdfgh");
+			
+			 Log.d("UCLINX LoginActivity >> ","login user details" + response[0] + "   "
+						+ response[1]);
 			System.out.println("login user details" + response[0] + "   "
 					+ response[1]);
 
-			if(response[1] != null || response[1].equalsIgnoreCase(null)){
+			if(response[1] != null){//!response[1].equalsIgnoreCase(null) || 
 				if(response[0].equalsIgnoreCase("200")){
 					try {
 						JSONObject objResult = new JSONObject(response[1]);
@@ -235,7 +271,7 @@ public class LoginActivity extends FragmentActivity {
 
 			}
 			
-			if(response[1] != null || response[1].equalsIgnoreCase(null)){
+			if(response[1] != null){//!response[1].equalsIgnoreCase(null) || 
 				if(response[0].equalsIgnoreCase("200")){
 					System.out.println(LOG_TAG +" >> "+s_token +" >> id > "+s_did);
 					ApplicationActivity.setLogin(true);

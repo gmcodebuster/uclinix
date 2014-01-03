@@ -29,6 +29,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -93,9 +94,9 @@ public class AppTabBFirstFragment extends BaseFragment{
 		
 		imageLoader = ImageLoader.getInstance();
 		options = new DisplayImageOptions.Builder()
-//		.showStubImage(R.drawable.ic_menu_search)
-//		.showImageForEmptyUri(R.drawable.ic_menu_search)
-//		.showImageOnFail(R.drawable.ic_menu_search)
+		.showStubImage(R.drawable.ic_launcher)
+		.showImageForEmptyUri(R.drawable.ic_menu_search)
+		.showImageOnFail(R.drawable.ic_launcher)
 		.cacheInMemory(true)
 		.cacheOnDisc(true)
 		.bitmapConfig(Bitmap.Config.RGB_565)
@@ -484,52 +485,56 @@ public class AppTabBFirstFragment extends BaseFragment{
 //							.get("type_of_loyalty_cardArrl").toString());					
 
 					System.out.println("");
-					//imageLoader.displayImage("http://www.uclinix.in/images/" + arrlpimage.get(position), holder.imgPhoto, options);//getResources().getString(R.string.url_base)
-imageLoader.displayImage("http://www.uclinix.in/images/" + arrlpimage.get(position), holder.imgPhoto, options, new ImageLoadingListener() {
-						
-						@Override
-						public void onLoadingStarted(String imageUri, View view) {
-							// TODO Auto-generated method stub
-							
-							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookmale);
-							}else{
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookfemale);
-							}
-						}
-									
-						
-						@Override
-						public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-							// TODO Auto-generated method stub
-							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
-								holder.imgPhoto.setBackgroundResource(0);
-							}else{
-								holder.imgPhoto.setBackgroundResource(0);
-							}
-						}
-						
-						@Override
-						public void onLoadingCancelled(String imageUri, View view) {
-							// TODO Auto-generated method stub
-							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookmale);
-							}else{
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookfemale);
-							}
-						}
-
-						@Override
-						public void onLoadingFailed(String imageUri, View view,
-								FailReason failReason) {
-							// TODO Auto-generated method stub
-							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookmale);
-							}else{
-								holder.imgPhoto.setBackgroundResource(R.drawable.facebookfemale);
-							}
-						}
-					});//getResources().getString(R.string.url_base)
+					
+					imageLoader.displayImage("http://www.uclinix.in/images/" + arrlpimage.get(position), holder.imgPhoto, options);//getResources().getString(R.string.url_base)
+//					imageLoader.displayImage("http://www.uclinix.in/images/" + arrlpimage.get(position), holder.imgPhoto, options, new ImageLoadingListener() {
+//						
+//						@Override
+//						public void onLoadingStarted(String imageUri, View view) {
+//							// TODO Auto-generated method stub
+//							
+//							Log.d("Patient list url >> ",imageUri);
+//							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
+//								view.setBackgroundResource(R.drawable.facebookmale);
+//							}else{
+//								view.setBackgroundResource(R.drawable.facebookfemale);
+//							}
+//						}									
+//						
+//						@Override
+//						public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//							// TODO Auto-generated method stub
+//							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
+//								holder.imgPhoto.setBackgroundResource(0);
+//							}else{
+//								holder.imgPhoto.setBackgroundResource(0);
+//							}
+//						}
+//						
+//						@Override
+//						public void onLoadingCancelled(String imageUri, View view) {
+//							// TODO Auto-generated method stub
+//							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
+//								holder.imgPhoto.setBackgroundResource(R.drawable.facebookmale);
+//							}else{
+//								holder.imgPhoto.setBackgroundResource(R.drawable.facebookfemale);
+//							}
+//						}
+//
+//						@Override
+//						public void onLoadingFailed(String imageUri, View view,
+//								FailReason failReason) {
+//							// TODO Auto-generated method stub
+//							if(arrlpgender.get(position).toString().equalsIgnoreCase("male")){
+//								holder.imgPhoto.setBackgroundResource(R.drawable.facebookmale);
+//							}else{
+//								holder.imgPhoto.setBackgroundResource(R.drawable.facebookfemale);
+//							}
+//						}
+//						
+//						
+//					});//getResources().getString(R.string.url_base)
+					
 					return convertView;
 				}
 		

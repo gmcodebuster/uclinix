@@ -30,7 +30,7 @@ import org.acra.annotation.*;
 @ReportsCrashes(
 	    formKey = "", //required for backward compatibility but not used
 	    mailTo = "gaurav.mehta@fafadiatech.com", //in case of sending Crash to an email address, by default it's blank implicitly  
-	    logcatArguments = { "-t", "10000", "-v", "long", "ActivityManager:I", "MyApp:D", "*:S" },
+	    logcatArguments = { "-t", "10000", "-v", "long", "ActivityManager:I", "MyApp:D", "*:S" },	    		
 	    /*customize data to send in crash report */
 	    customReportContent = {
 	    ReportField.APP_VERSION_CODE,
