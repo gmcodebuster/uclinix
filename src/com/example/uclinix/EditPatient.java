@@ -1,5 +1,9 @@
 package com.example.uclinix;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,17 +14,35 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.uclinix.AddPatient.AsynkTaskAddPatient;
+import com.example.uclinix.AddPatient.LoadImagesFromSDCard;
 import com.example.uclinix.EditAppointment.AddAppointCategoryAsync;
+import com.nostra13.universalimageloader.cache.disc.DiscCacheAware;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.CursorLoader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,32 +51,51 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditPatient extends BaseFragment {
 	EditText edt_user,edt_fname,edt_sname,edt_email,edt_add,edt_ll,edt_mno;
 	TextView txt_dob,txt_gen;
-	Button btn_dob,btn_gen,btnEdit,btnCancel;
-	String da,mo,yy,st,s_token,str_gen;
+	Button btn_dob,btn_gen,btnEdit,btnCancel,btn_selectPhoto;
+	ImageView imguserphoto;
+	String da,mo,yy,st,s_token,str_gen,path;
 	static LayoutInflater inflater;
 	ArrayList<CategoryListData> cd_arraylist = new ArrayList<CategoryListData>();
 	
 	private AlertDialog catDialog;
 	final String LOG_TAG = "Edit Patient : ";
-	String pb_id = "",pb_username = "",pb_email = "",pb_add = "",pb_ll = "",pb_mo = "",pb_dob="",pgen="",pfname="",plname="";
+	String pb_id = "",pb_username = "",pb_email = "",pb_add = "",pb_ll = "",pb_mo = "",pb_dob="",pgen="",pfname="",plname="",pimg="";
 	private String[] gender_type = {"Male","Female"};
 	private AlertDialog genderdia;
-	
+	 final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 	1;
+	 private static final int SELECT_PICTURE = 2;
+	 private String selectedImagePath;
+	 
+	 Uri imageUri 		 = null;
+	 
+	 DisplayImageOptions options;
+	 ImageLoader imageLoader;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		 imageLoader = ImageLoader.getInstance();
+			options = new DisplayImageOptions.Builder()
+			.showStubImage(R.drawable.ic_launcher)
+			.showImageForEmptyUri(R.drawable.ic_menu_search)
+			.showImageOnFail(R.drawable.ic_launcher)
+			.cacheInMemory(true)
+			.cacheOnDisc(true)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.build();
 		
 		
 		Bundle bundle = this.getArguments();
 		 if(bundle != null){
+			
 			 pb_id = bundle.getString("pid");
 			 pb_username = bundle.getString("pusernm");
 			 pb_email = bundle.getString("pemail");
@@ -65,12 +106,14 @@ public class EditPatient extends BaseFragment {
 			 pgen = bundle.getString("pgen");
 			 pfname = bundle.getString("pfname");
 			 plname = bundle.getString("plname");
+			 pimg = bundle.getString("pimg");	//full path of image
+			 
+			 Log.d("EditaPatient Bundle",""+pimg);
 		 }
 		
 		 
-		 
 		System.out.println("pb_id >> "+pb_id +" pb_username >> "+pb_username+" pb_email > "+pb_email +" pb_add > "+pb_add+ " pb_ll > "+pb_ll+
-		 " pb_mo > "+pb_mo+" pb_dob > "+pb_dob+" pgen > "+pgen+" pfname > "+pfname+" plname > "+plname);
+		 " pb_mo > "+pb_mo+" pb_dob > "+pb_dob+" pgen > "+pgen+" pfname > "+pfname+" plname > "+plname+" pimg :>> "+pimg );
 		
 		
 		
@@ -88,9 +131,12 @@ public class EditPatient extends BaseFragment {
 		 
 		 txt_dob = (TextView) view.findViewById(R.id.txt_dob);
 		 txt_gen = (TextView) view.findViewById(R.id.txt_gender);
+		 imguserphoto = (ImageView)  view.findViewById(R.id.img_userphoto);
 		 
 		 btn_dob = (Button) view.findViewById(R.id.btn_dob);
 		 btn_gen = (Button) view.findViewById(R.id.btn_gender);
+		 
+		 btn_selectPhoto = (Button) view.findViewById(R.id.btn_userphoto);
 		 
 		 btn_dob.setOnClickListener(datedialog);
 		 btn_gen.setOnClickListener(genderlistener);
@@ -101,10 +147,15 @@ public class EditPatient extends BaseFragment {
 		 btnEdit.setOnClickListener(editbtnlistener);
 		 btnCancel.setOnClickListener(null);
 		 
-		 
-		 
-		 
-		 
+		 btn_selectPhoto.setOnClickListener(btnphotolistener);
+//		 btn_selectPhoto.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					// TODO Auto-generated method stub
+//					selectImage();
+//				}
+//			});
 		 
 		 
 		 
@@ -117,6 +168,9 @@ public class EditPatient extends BaseFragment {
 		 txt_gen.setText(pgen);
 		 edt_fname.setText(pfname);
 		 edt_sname.setText(plname);
+		 
+		
+		imageLoader.displayImage(pimg, imguserphoto, options);//getResources().getString(R.string.url_base)
 		 return view;
 	}
 	
@@ -125,7 +179,12 @@ public class EditPatient extends BaseFragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		
+
+		File cacheDir = StorageUtils.getCacheDirectory(mActivity);
+		File exCacheDir = mActivity.getExternalCacheDir();
+		Log.d("EditPatient Cache >> ",cacheDir.getPath()+" : External Cache : "+exCacheDir.getPath());
+
+				
 		AlertDialog.Builder durationbuilder = new AlertDialog.Builder(mActivity);
 		durationbuilder.setTitle("select gender");
 		durationbuilder.setIcon(R.drawable.ic_launcher);				
@@ -144,6 +203,135 @@ public class EditPatient extends BaseFragment {
 		durationbuilder.setCancelable(true);
 		genderdia = durationbuilder.create();
 		
+		
+		
+	}// End of onCreate
+	
+	private void selectImage(){
+		
+		 final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+		 PackageManager pm = getActivity().getPackageManager();
+
+			
+
+			if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+
+//				text.setText("This device has a Camera");
+
+			} else {
+
+//				text.setText("This device doesn't have a Camera");
+			}
+	
+			  AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		        builder.setTitle("Add Photo!");
+		        builder.setItems(options, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						 if (options[which].equals("Take Photo"))
+			                {
+/*		                    
+								Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);			                    
+			                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+			                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			                    getActivity().startActivityForResult(intent, 1);*/
+							 
+							 /********************camera intent start***************/
+								//Define the file-name to save photo taken by Camera activity
+								
+								String fileName = "Camera_Example.jpg";
+								
+								//Create parameters for Intent with filename
+								
+								ContentValues values = new ContentValues();
+								
+								values.put(MediaStore.Images.Media.TITLE,fileName);
+								values.put(MediaStore.Images.Media.DESCRIPTION, "Image capture by camera");
+								
+								//imageUri is the current activity attribute, define and save it for later usage
+								
+								imageUri = mActivity.getContentResolver().insert(
+										MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+								Toast.makeText(mActivity, "Image URI path >> "+imageUri.toString(), 5000).show();
+								/***** EXTERNAL_CONTENT_URI : style URI for the "primary" external storage volume. **/
+								
+								//standard Intent action that can be sent to have the camera
+								//application capture an image and return it.
+								
+								Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+								
+								intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+								intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+								
+								getActivity().startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+								
+								
+								/***Camera Intent End *****/
+		                }
+			                else if (options[which].equals("Choose from Gallery"))
+			                {
+			                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			                    getActivity().startActivityForResult(intent, 2);
+			                	
+			                	
+//			                	Intent intent = new Intent();
+//			                    intent.setType("image/*");
+//			                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//			                    getActivity().startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+			 
+			                }
+			                else if (options[which].equals("Cancel")) {
+			                    dialog.dismiss();
+			                }
+			            }
+			        });
+			        builder.show();
+					
+	}//End
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+	
+	Bitmap bitmap = null;
+		
+		Toast.makeText(mActivity, "Result code >> "+resultCode, Toast.LENGTH_LONG).show();
+		Toast.makeText(mActivity, "Request code >"+requestCode, Toast.LENGTH_LONG).show();
+	
+		if(resultCode == mActivity.RESULT_OK){
+			Log.d("Inside Add Patient ","Activity.RESULT_OK");
+			if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+				/********* Load Captured Image And Data Start ******************/
+				Log.d("Inside Add Patient ","CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE");
+				String imageId = convertImageUriToFile(imageUri,mActivity);				
+				Toast.makeText(mActivity, "Physical path >> "+imageId, 5000).show();
+				
+				// Create and execute AsyncTask to load capture image
+				
+				new LoadImagesFromSDCard().execute(""+imageId);
+				
+				/****** Load Captured Image And Data End ***********/
+			}
+			
+			if (requestCode == SELECT_PICTURE) {
+				
+				Log.d("Inside Add Patient ","SELECT_PICTURE");
+                Uri selectedImageUri = data.getData();
+                selectedImagePath = getPath(selectedImageUri);
+                path = getPath(selectedImageUri);
+                System.out.println("Image Path : " + selectedImagePath);
+                Toast.makeText(mActivity.getApplicationContext(), "Image Path : " + selectedImagePath, Toast.LENGTH_LONG).show();
+                Bitmap bm = reduceImageSize(selectedImagePath);
+                if(bm != null)
+                	imguserphoto.setImageBitmap(bm);
+               
+            }
+			
+			
+		}
 	}
 	
 	private void showDatePicker() {
@@ -210,6 +398,8 @@ public class EditPatient extends BaseFragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			
+			btn_dob.setError(null);
 			showDatePicker();
 		}
 	}; 
@@ -219,8 +409,18 @@ public class EditPatient extends BaseFragment {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			btn_gen.setError(null);
 			genderdia.show();
 			
+		}
+	};
+	
+	private OnClickListener btnphotolistener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			selectImage();
 		}
 	};
 	
@@ -239,23 +439,23 @@ public class EditPatient extends BaseFragment {
 										
 					if (edt_fname.getText().toString().equals("")
 							|| edt_fname.getText().toString().equals("null")) {
-						edt_fname.requestFocus();
-						edt_fname.setError("Please enter first name");
-						return;
+//						edt_fname.requestFocus();
+//						edt_fname.setError("Please enter first name");
+//						return;
 					}
 
 					if (edt_sname.getText().toString().equals("")
 							|| edt_sname.getText().toString().equals("null")) {
-						edt_sname.requestFocus();
-						edt_sname.setError("Please enter last name");
-						return;
+//						edt_sname.requestFocus();
+//						edt_sname.setError("Please enter last name");
+//						return;
 					}
 					
 					if (edt_email.getText().toString().equals("")
 							|| edt_email.getText().toString().equals("null")) {
-						edt_email.requestFocus();
-						edt_email.setError("Please enter email");
-						return;
+//						edt_email.requestFocus();
+//						edt_email.setError("Please enter email");
+//						return;
 					}
 
 					if (edt_add.getText().toString().equals("")
@@ -268,16 +468,16 @@ public class EditPatient extends BaseFragment {
 					
 					if (edt_ll.getText().toString().equals("")
 							|| edt_ll.getText().toString().equals("null")) {
-						edt_ll.requestFocus();
-						edt_ll.setError("Please enter landline no");
-						return;
+//						edt_ll.requestFocus();
+//						edt_ll.setError("Please enter landline no");
+//						return;
 					}
 
 					if (edt_mno.getText().toString().equals("")
 							|| edt_mno.getText().toString().equals("null")) {
-						edt_mno.requestFocus();
-						edt_mno.setError("Please enter mobile no");
-						return;
+//						edt_mno.requestFocus();
+//						edt_mno.setError("Please enter mobile no");
+//						return;
 					}
 					
 					
@@ -487,5 +687,248 @@ public class EditPatient extends BaseFragment {
 						}	
 					}
 				}
+			}//End of AsynkTask AddPatient
+			
+			
+			/**
+			 * 
+			 * Async Task for loading the images from sd card
+			 */
+			
+			public class LoadImagesFromSDCard extends AsyncTask<String, Void, Void>{
+				
+				private ProgressDialog Dialog = new ProgressDialog(mActivity);
+				
+				Bitmap mBitmap;
+				
+				protected void onPreExecute(){
+					
+					//Note : You can call UI Element here.
+					
+					//progress dialog
+					
+					Dialog.setMessage("Loading image from sdcard..");
+					Dialog.show();
+				}
+				
+				
+				//call after onPreExecute method
+				protected Void doInBackground(String... urls){
+					
+					Bitmap bitmap = null;
+					Bitmap newBitmap = null;
+					
+					Uri uri = null;
+					
+					try{
+//						Uri.withAppendedPath Method Description parameters				
+//						baseUri Uri to append path segment to pathSegment encoded path segment to append 
+//						Returns a new Uri based on baseUri with the given segment appended to the path
+						
+						uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,""+urls[0]);
+//						uri = Uri.parse(urls[0]);
+						/**** Decode an input stream into bitmap *****/
+						bitmap = BitmapFactory.decodeStream(mActivity.getContentResolver().openInputStream(uri));
+						
+						
+						if(bitmap != null){
+							
+							//Creates a new bitmap, scaled from an existing bitmap
+							
+//							Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 70, 70, true);
+//		                    int w = scaled.getWidth();
+//		                    int h = scaled.getHeight();
+		                    // Setting post rotate to 90
+//		                    Matrix mtx = new Matrix();
+//		                    mtx.postRotate(90);
+		                    // Rotating Bitmap
+//		                   newBitmap = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);	
+		                   
+													
+						newBitmap = Bitmap.createScaledBitmap(bitmap,70,70,true);
+						
+						bitmap.recycle();
+						if(newBitmap != null){
+							mBitmap = newBitmap;
+						}
+						}
+					}catch(IOException e){
+						//Error fetching image, try to recover
+						
+						//cancel execution of this task.
+						cancel(true);
+						
+					}
+					return null;
+				}
+				
+			@Override
+			protected void onPostExecute(Void result) {
+				// TODO Auto-generated method stub
+//				super.onPostExecute(result);
+//				Note : You can call UI Element here.
+//				Close progress
+			
+				Dialog.dismiss();
+				
+				if(mBitmap!= null){
+					
+					//set Image to ImageView
+					
+					imguserphoto.setImageBitmap(mBitmap);
+					
+					
+				}
 			}
+		}//End of load image async task
+			
+			
+			public Bitmap reduceImageSize(String mSelectedImagePath){
+				 
+			      Bitmap m = null;
+			      try {
+			        File f = new File(mSelectedImagePath);
+
+			      //Decode image size
+			        BitmapFactory.Options o = new BitmapFactory.Options();
+			        o.inJustDecodeBounds = true;
+			        BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+
+			        //The new size we want to scale to
+			        final int REQUIRED_SIZE=150;
+
+			        //Find the correct scale value. It should be the power of 2.
+			        int width_tmp=o.outWidth, height_tmp=o.outHeight;
+			        int scale=1;
+			        while(true){
+			            if(width_tmp/2 < REQUIRED_SIZE || height_tmp/2 < REQUIRED_SIZE)
+			                break;
+			            width_tmp/=2;
+			            height_tmp/=2;
+			            scale*=2;
+			        }
+
+			        //Decode with inSampleSize
+			        BitmapFactory.Options o2 = new BitmapFactory.Options();
+			        o2.inSampleSize=scale;
+			        m = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+			    } catch (FileNotFoundException e) {
+			        Toast.makeText(mActivity.getApplicationContext(), "Image File not found in your phone. Please select another image.", Toast.LENGTH_LONG).show();
+			    }
+			    return  m;
+			}
+					
+			/******* Convert Image Uri path physical path **********************/
+			
+			public String convertImageUriToFile(Uri imageUri, FragmentActivity activity){
+				
+				Cursor cursor = null;
+				int imageID = 0;
+				int file_ColumnIndex;
+				String Path = null;
+				try{
+					
+					/******** Which columns values want to get ****************/
+					String[] proj = {
+									MediaStore.Images.Media.DATA,
+									MediaStore.Images.Media._ID,
+									MediaStore.Images.Thumbnails._ID,
+									MediaStore.Images.ImageColumns.ORIENTATION
+							
+					};
+					
+					
+//					cursor = activity.managedQuery(
+//							imageUri,		//Get data for specific imageURI
+//							proj,			// Which columns to return
+//							null,			// WHERE clause; which rows to return (all rows)
+//							null,			// WHERE clause selection arguments (none)
+//							null			// Order-by clause (ascending by name)
+//							);
+					CursorLoader loader = new CursorLoader(mActivity, imageUri, proj, null, null, null); 
+					cursor = loader.loadInBackground();
+					
+//					 cursor = mActivity.getContentResolver().query(imageUri, proj, null, null, null);
+					   			
+					//Get Query Data
+					
+					int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+					int columnIndexThumb = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+					file_ColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+					
+//					int orientation_ColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION);
+					
+					int size = cursor.getCount();
+					
+					/****** If size is 0, there are no images on the SD card.  *********/
+					
+					if(size == 0){
+//						imageDetails.setText("No Image");
+					}else{
+						int thumbID = 0;
+						if(cursor.moveToFirst()){
+							
+							/******* Captured image details *************/
+							
+							// Used to show image on view in LoadImagesFromSDCard class
+							
+							imageID = cursor.getInt(columnIndex);
+							
+							thumbID = cursor.getInt(columnIndexThumb);
+							
+							Path = cursor.getString(file_ColumnIndex);
+							path = Path;
+							//String orientation = cursor.getString(orientation_ColumnIndex);
+							
+							String CapturedImageDetails = "CapturedImageDetails : \n\n"
+															+" ImageID :"+imageID+"\n"
+															+" ThumbID :"+thumbID+"\n"
+															+" Path :"+Path+"\n";
+							
+							//Show Captured Image detail on activity
+//							imageDetails.setText(CapturedImageDetails);
+							
+						}
+					}
+				}finally{
+					if(cursor != null){
+						cursor.close();
+					}
+				}
+				
+				//Return captured Image ImageID ( By this ImageID Image will load from sdcard )
+				
+				return ""+imageID;
+			}
+		
+			//Select photo from gallery
+			
+			 public String getPath(Uri uri) {
+			        String[] projection = { MediaStore.Images.Media.DATA };
+			       
+//					@SuppressWarnings("deprecation")
+//					Cursor cursor = mActivity.managedQuery(uri, projection, null, null, null);
+					
+					CursorLoader loader = new CursorLoader(mActivity, uri, projection, null, null, null); 
+					Cursor cursor = loader.loadInBackground();
+					
+			        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			        cursor.moveToFirst();
+			        return cursor.getString(column_index);
+			    }
+			 
+			 
+			 //Cachedirectory location
+			/* public static File getCacheDirectory(Context context) {
+			        File appCacheDir = null;
+			        if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+			            appCacheDir = StorageUtils.getExternalCacheDir(context);
+			        }
+			        if (appCacheDir == null) {
+			            appCacheDir = context.getCacheDir();
+			        }
+			        return appCacheDir;
+			    }*/
+			 
+			
 }

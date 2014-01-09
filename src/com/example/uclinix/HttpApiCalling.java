@@ -414,7 +414,43 @@ public class HttpApiCalling {
 
 	}
 	
+// Delete patient data 
 	
+	public static String[] patienttDelete(String url,String token,String appid) {
+
+//		String url = "http://192.168.2.28:8000/api2/appointment_delete/";
+		
+		int res_code;
+		String[] response_string = new String[2];
+		HttpResponse response;
+
+		System.out.println("APP _ ID >>> "+appid);
+		
+		HttpParams params = new BasicHttpParams();
+		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+				HttpVersion.HTTP_1_1);
+		HttpDelete httpdelete = new HttpDelete(url);
+		httpdelete.setHeader("Authorization", "Token "+token);
+		
+
+		try {
+
+			client = getThreadSafeClient();
+			response = client.execute(httpdelete);
+
+			res_code = response.getStatusLine().getStatusCode();
+
+//			response_string[1] = inputStreamToString(
+//					response.getEntity().getContent()).toString();
+			response_string[0] = "" + res_code;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return response_string;
+
+	}
 
 	// =================== Profile Upload post method
 	// =======================================================

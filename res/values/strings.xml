@@ -16,7 +16,7 @@
      
      <string name="url_addpatient">/api/patient_add/</string>
      <string name="url_editpatient">/api/patient_edit/</string>
-     
+     <string name="url_patient_delete">/api/patient_delete/</string>
      <string name="url_chngpassword">/api/reset_password/</string>
     
     <string name="tab_words">Words</string>

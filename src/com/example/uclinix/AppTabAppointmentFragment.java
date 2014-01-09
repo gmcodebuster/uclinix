@@ -1,6 +1,9 @@
 package com.example.uclinix;
 //https://github.com/iamjayanth/FragmentTabStudy/blob/master/src/com/research/fragmenttabstudy/tabB/AppTabBFirstFragment.java
 //http://www.androiddevelopersolution.com/
+//http://bartinger.at/listview-with-sectionsseparators/
+//http://samir-mangroliya.blogspot.in/
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -335,7 +338,7 @@ public class AppTabAppointmentFragment extends BaseFragment implements OnItemCli
 					    if(endtime != null)
 					    	endtime.setText("End:"+ei.getEndtime());
 					    
-imageLoader.displayImage("http://www.uclinix.in/images/" + ei.getimgUrl(), img_photo, options,new ImageLoadingListener() {
+					    imageLoader.displayImage("http://www.uclinix.in/images/" + ei.getimgUrl(), img_photo, options,new ImageLoadingListener() {
 							
 							@Override
 							public void onLoadingStarted(String imageUri, View view) {
@@ -903,7 +906,7 @@ imageLoader.displayImage("http://www.uclinix.in/images/" + ei.getimgUrl(), img_p
 //						adapter.notifyDataSetChanged();
 //						listview.invalidate();
 //						new AppointmentListAsync().execute();
-						mActivity.pushFragments(AppConstants.TAB_A, new DeleteMessageFragment(), true, true);
+						mActivity.pushFragments(AppConstants.TAB_A, new DeleteMessageFragment("Appointment deleted sucessfully"), true, true);
 						
 					}
 					if(response[0].equalsIgnoreCase("401")){
@@ -912,7 +915,7 @@ imageLoader.displayImage("http://www.uclinix.in/images/" + ei.getimgUrl(), img_p
 					}
 					if(response[0].equalsIgnoreCase("404")){
 						System.out.println(LOG_TAG+" >> "+response[0]);
-						mActivity.pushFragments(AppConstants.TAB_A, new DeleteMessageFragment(), true, true);     
+						mActivity.pushFragments(AppConstants.TAB_A, new DeleteMessageFragment("Appointment not deleted, Please try again."), true, true);     
 					}
 					
 					

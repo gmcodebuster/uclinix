@@ -179,7 +179,27 @@
           />
       </LinearLayout>
        
-    
+     <LinearLayout 
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          >
+      <ImageView 
+	       android:id="@+id/img_userphoto"
+	       android:layout_width="72px"
+            android:layout_height="72px"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"            
+            android:src="@drawable/ic_launcher"
+       />
+      <Button 
+          android:id="@+id/btn_userphoto"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"         
+          android:layout_gravity="center_horizontal"          
+          android:text="Change photo"          
+          />
+      </LinearLayout>
     <LinearLayout 
         android:id="@+id/linlay"
         android:layout_height="wrap_content"

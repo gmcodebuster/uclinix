@@ -52,7 +52,7 @@ public class AppTabBFirstFragment extends BaseFragment{
 	final String LOG_TAG = "Patient_List : ";
 	static LayoutInflater inflater;
 	String s_token;
-	String b_id,b_pusername,p_email,p_add,p_ll,p_mo,p_dob,p_gen,p_fsnm,p_fname,p_sname;
+	String b_id,b_pusername,p_email,p_add,p_ll,p_mo,p_dob,p_gen,p_fsnm,p_fname,p_sname,p_img;
 	
 	ArrayList<String> arrlpid = new ArrayList<String>();
 	ArrayList<String> arrlpusername = new ArrayList<String>();
@@ -116,12 +116,12 @@ public class AppTabBFirstFragment extends BaseFragment{
          {
         	 
         	 
-        if(ApplicationActivity.getUserRole().equalsIgnoreCase("Patient")){	 
+        if(ApplicationActivity.getUserRole().equalsIgnoreCase("Doctor")){	 
 //         Toast.makeText(getActivity(),"Edit Contact",Toast.LENGTH_SHORT).show();
          qab.dismiss();
          
                  
-         System.out.println("Inside AppTab p_id >> "+b_id +" unamed >> "+b_pusername+" e email > "+p_email +" e add > "+p_add+ " p_ll > "+p_ll+" p_mo > "+p_mo+" dob >> "+p_dob+" p_gen >> "+p_gen+" p_fname >>" +p_fsnm);
+         System.out.println("Inside AppTab p_id >> "+b_id +" unamed >> "+b_pusername+" e email > "+p_email +" e add > "+p_add+ " p_ll > "+p_ll+" p_mo > "+p_mo+" dob >> "+p_dob+" p_gen >> "+p_gen+" p_fname >>" +p_fsnm+" p_img >> "+p_img);
          EditPatient fragment = new EditPatient();
          Bundle bundle = new Bundle();
          bundle.putString("pid", b_id);
@@ -134,6 +134,7 @@ public class AppTabBFirstFragment extends BaseFragment{
          bundle.putString("pgen", p_gen);
          bundle.putString("pfname", splited[0]);
          bundle.putString("plname", splited[1]);
+         bundle.putString("pimg", p_img);
          
          fragment.setArguments(bundle);
        
@@ -146,7 +147,7 @@ public class AppTabBFirstFragment extends BaseFragment{
         	
         	 qab.dismiss();
 //        	 alert.show();
-        	 alertMessage("TO use this feature please login as a patient.");
+        	 alertMessage("TO use this feature please login as a Doctor.");
         	
         }
       }
@@ -157,27 +158,27 @@ public class AppTabBFirstFragment extends BaseFragment{
                
         
         
-        /*del.setTitle("Delete");       
+        del.setTitle("Delete");       
         del.setIcon(getResources().getDrawable(R.drawable.deleteicon));
         del.setOnClickListener(new OnClickListener()
         {
          public void onClick(View v)
          {
         	 
-        if(ApplicationActivity.getUserRole().equalsIgnoreCase("Patient")){	 
-         Toast.makeText(getActivity(),"Delete Contact",Toast.LENGTH_SHORT).show();
-//         new DeletePatientListAsync().execute();         
+        if(ApplicationActivity.getUserRole().equalsIgnoreCase("Doctor")){	 
+//         Toast.makeText(getActivity(),"Delete Contact",Toast.LENGTH_SHORT).show();
+                 
          	qab.dismiss();
-         	
+         	new DeletePatientListAsync().execute(b_id); 
          
         }else{
         	qab.dismiss();
-        	 alertMessage("TO use this feature please login as a patient.");
+        	 alertMessage("TO use this feature please login as a doctor.");
         }
          }
     
          
-        });*/
+        });
         
         
       
@@ -230,6 +231,8 @@ public class AppTabBFirstFragment extends BaseFragment{
 	        	p_dob = arrlpdob.get(position);
 	        	p_gen = arrlpgender.get(position);
 	        	p_fsnm = arrlpfsname.get(position);
+	        	p_img = "http://www.uclinix.in/images/" + arrlpimage.get(position);
+	        	Log.d("AppTabBFirstFragment",""+p_img);
 	        	
 //	        	str = "Hello I'm your String";
 	        	splited = p_fsnm.split("\\s+");
@@ -238,7 +241,7 @@ public class AppTabBFirstFragment extends BaseFragment{
 	        	qab = new QuickActionBar(view);
 
 				qab.addItem(edit);
-//				qab.addItem(del);
+				qab.addItem(del);
 				
 				qab.setAnimationStyle(QuickActionBar.GROW_FROM_CENTER);
 
@@ -291,10 +294,20 @@ public class AppTabBFirstFragment extends BaseFragment{
 			pdialog.setContentView(R.layout.wheel);
 
 			pdialog.setCancelable(true);
+			
 			arrlpusername.clear();
 			arrlpemail.clear();
 			arrlpmobile.clear();
 			arrlpimage.clear();
+			
+			
+			arrlpid.clear();		
+			arrlpaddress.clear();
+			arrlplandline.clear();			
+			arrlpdob.clear();
+			arrlpgender.clear();
+			arrlpimage.clear();
+			arrlpfsname.clear(); 
 			
 			pdialog.setOnCancelListener(new OnCancelListener() {
 
@@ -565,5 +578,138 @@ public class AppTabBFirstFragment extends BaseFragment{
 //                    }
 //                    return false;
 //        }
+	 
+	 
+	//AsyncTask  for delete
+		
+			class DeletePatientListAsync extends AsyncTask<String, Void, String>{
+				ProgressDialog pdialog = new ProgressDialog(mActivity);
+				String[] response = new String[2];
+				
+				
+				public DeletePatientListAsync(){
+					s_token = ApplicationActivity.getToken();
+				}
+				
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					pdialog = ProgressDialog.show(mActivity, "", "");
+					pdialog.setContentView(R.layout.wheel);
+					
+					pdialog.setCancelable(true);
+					pdialog.setOnCancelListener(new OnCancelListener() {
+
+						public void onCancel(DialogInterface dialog) {
+							// TODO Auto-generated method stub
+							cancel(true);
+						}
+					});
+				}
+				
+				@Override
+				protected String doInBackground(String... params) {
+					// TODO Auto-generated method stub
+								
+					String p_id = params[0];
+					
+					String url_patientlist = mActivity.getResources().getString(R.string.url_base)+mActivity.getResources().getString(R.string.url_patient_delete)+p_id;
+					System.out.println(LOG_TAG + "URL >> "+url_patientlist +" >> "+ p_id);
+					response = HttpApiCalling.appointmentDelete(url_patientlist,ApplicationActivity.getToken(),p_id);
+					System.out.println("delete_list details" + response[0] + "   "
+							+ response[1]);
+
+					if(response[1] != null){
+						if(response[0].equalsIgnoreCase("200")){
+							try{
+								//first array				
+							
+							}catch(Exception e){
+								e.printStackTrace();
+							}
+//							System.out.println("MAIN ACTIVITY item Obj size2 > "+items.size());
+				}//response is 200
+				if(response[0].equalsIgnoreCase("400")){		
+				
+					try {
+						JSONObject objResult = new JSONObject(response[1]);
+						
+							
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}//response is 400
+				
+				if(response[0].equalsIgnoreCase("204")){		
+					
+					try {
+						
+						//success
+//						JSONObject objResult = new JSONObject(response[1]);
+						
+							
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}//response is 400
+				
+				}//response is null
+					
+					
+					
+					
+					
+					
+
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(String result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+				
+					if (pdialog.isShowing()) {
+						pdialog.dismiss();
+
+					}
+					
+					
+					if(response[0] != null){
+						if(response[0].equalsIgnoreCase("200")){
+							
+									
+						}
+						if(response[0].equalsIgnoreCase("400")){
+							System.out.println(LOG_TAG+" >> "+response[0]);
+							
+						}
+						
+						if(response[0].equalsIgnoreCase("204")){
+							System.out.println(LOG_TAG+" >> "+response[0]);
+							//success
+//							adapter.notifyDataSetChanged();
+//							listview.invalidate();
+//							new AppointmentListAsync().execute();
+							mActivity.pushFragments(AppConstants.TAB_B, new DeleteMessageFragment("Patient deleted sucessfully"), true, true);
+							
+						}
+						if(response[0].equalsIgnoreCase("401")){
+							System.out.println(LOG_TAG+" >> "+response[0]);
+//							Toast.makeText(getActivity(), "id Not found", Toast.LENGTH_LONG).show();
+						}
+						if(response[0].equalsIgnoreCase("404")){
+							System.out.println(LOG_TAG+" >> "+response[0]);
+							mActivity.pushFragments(AppConstants.TAB_B, new DeleteMessageFragment("Patient not deleted, Please try again."), true, true);     
+						}
+						
+						
+					}	
+			
+				}
+			} 
 	 
 }

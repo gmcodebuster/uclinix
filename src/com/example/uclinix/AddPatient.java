@@ -143,9 +143,7 @@ public class AddPatient extends BaseFragment{
 		Log.d("Add Patient activity >> ","Absolute path >> "+imageFile.getAbsolutePath()+" >>> path > "+imageFile.getPath());
 //		path = "android.resource://com.example.uclinix/res/raw" + "/" + R.raw.ic_launcher;
 		
-		path = "/data/data/com.example.uclinix/files/ic_launcher.png";
-		
-		
+		path = "/data/data/com.example.uclinix/files/ic_launcher.png";		
 		
 		try {
 						
@@ -244,6 +242,8 @@ public class AddPatient extends BaseFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
+				btnGender.setError(null);
 				genderdia.show();
 			}
 		});
@@ -400,6 +400,7 @@ public class AddPatient extends BaseFragment{
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			btnBdate.setError(null);
 			showDatePicker();
 		}
 	}; 
