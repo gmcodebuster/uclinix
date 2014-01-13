@@ -137,7 +137,7 @@ public class AddPatient extends BaseFragment{
 		btnGender = (Button) view.findViewById(R.id.edt_gender);
 		btnGender.setOnClickListener(genderdialog);
 		
-		copyDB(ctx);
+		copyLauncherFile(ctx);
 		String uriStr = "android.resource://com.example.uclinix/res/drawable" + "/" + R.raw.ic_launcher; 
 		File imageFile = new File(uriStr); 
 		Log.d("Add Patient activity >> ","Absolute path >> "+imageFile.getAbsolutePath()+" >>> path > "+imageFile.getPath());
@@ -1127,7 +1127,7 @@ public class AddPatient extends BaseFragment{
 }
 	 
 	 
-	 public void copyDB(Context ctx)
+	 public void copyLauncherFile(Context ctx)
 		{
 			
 			

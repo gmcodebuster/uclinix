@@ -612,7 +612,7 @@ public class HttpApiCalling {
 	
 	//Edit Patient
 //	
-	public static String[] EditPatient(String url,String token,String username,String first_name, String last_name,String email,String address,String landline,String mobile,String dob,String gender,String id) {
+	public static String[] EditPatient1(String url,String token,String username,String first_name, String last_name,String email,String address,String landline,String mobile,String dob,String gender,String id) {
 
 		int res_code;
 		String[] response_string = new String[2];
@@ -671,6 +671,94 @@ public class HttpApiCalling {
 		
 	}
 	
+	
+	
+	// =======================================================
+																	
+	public static String[] EditPatient(String url, String token,String username,
+																				String first_name, String last_name,
+										String email,String address,
+																	String landline,String mobile,
+											String dob,String gender,
+																		String id,String attachment) {
+		int res_code;
+		File file = null;
+		String[] response_string = new String[2];
+		HttpResponse response;
+		// Create a new HttpClient and Post Header
+		HttpParams params = new BasicHttpParams();
+		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+				HttpVersion.HTTP_1_1);
+		//
+		HttpPut httpput = new HttpPut(url);
+		httpput.setHeader("Authorization", "Token "+token);
+		
+		System.out.println("File address >> " + attachment);
+		if (attachment == null) {
+
+		} else {
+
+			file = new File(attachment);// "/sdcard/ed4b42187205df405ddd7953d2356648.jpg"
+			String fname = file.getAbsoluteFile().getName().toString();
+
+			System.out.println("File path >>" + file.getAbsoluteFile());
+			System.out.println("File name >>" + fname);
+		}
+
+		MultipartEntity mpEntity = new MultipartEntity();
+		
+		try {
+
+			mpEntity.addPart("username", new StringBody(username));
+			mpEntity.addPart("first_name", new StringBody(first_name));
+			mpEntity.addPart("last_name", new StringBody(last_name));
+			mpEntity.addPart("email", new StringBody(email));
+			mpEntity.addPart("address", new StringBody(address));
+
+			mpEntity.addPart("landline", new StringBody(landline));
+			mpEntity.addPart("mobile", new StringBody(mobile));
+			mpEntity.addPart("dob", new StringBody(dob));
+			mpEntity.addPart("gender", new StringBody(gender));
+			mpEntity.addPart("id", new StringBody(id));
+
+			if (file != null) {
+				mpEntity.addPart("image", new FileBody(file, "image/jpg"));
+			}
+
+			// Execute HTTP Post Request
+			client = getThreadSafeClient();
+
+			httpput.setEntity(mpEntity);
+			// httppost.setEntity(reqEntity);
+
+			response = client.execute(httpput);
+
+			res_code = response.getStatusLine().getStatusCode();
+
+			Log.v("539 Status Line ", response.getStatusLine().toString());
+			Log.d("540 res_code", "res_code " + res_code);
+			response_string[1] = inputStreamToString(
+					response.getEntity().getContent()).toString();
+			response_string[0] = "" + res_code;
+
+			HttpEntity responseEntity = response.getEntity();
+
+			Log.v("Response Entity", responseEntity.toString());
+			Log.v("Response Code>>", response_string[0]);
+
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("Exception", "IO exception" + e);
+		}
+
+		
+
+		return response_string;
+	}//End of Edit Patient
 	
 	//Change password
 //	

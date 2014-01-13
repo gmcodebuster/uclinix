@@ -1,9 +1,12 @@
 package com.example.uclinix;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,7 +63,7 @@ public class EditPatient extends BaseFragment {
 	TextView txt_dob,txt_gen;
 	Button btn_dob,btn_gen,btnEdit,btnCancel,btn_selectPhoto;
 	ImageView imguserphoto;
-	String da,mo,yy,st,s_token,str_gen,path;
+	String da,mo,yy,st,s_token,str_gen,path,f_name;
 	static LayoutInflater inflater;
 	ArrayList<CategoryListData> cd_arraylist = new ArrayList<CategoryListData>();
 	
@@ -108,6 +111,10 @@ public class EditPatient extends BaseFragment {
 			 plname = bundle.getString("plname");
 			 pimg = bundle.getString("pimg");	//full path of image
 			 
+			 File f1 = new File(pimg);
+			 f_name = f1.getName();
+			 f1 = null;
+			 
 			 Log.d("EditaPatient Bundle",""+pimg);
 		 }
 		
@@ -145,7 +152,7 @@ public class EditPatient extends BaseFragment {
 		 btnCancel = (Button) view.findViewById(R.id.btnCan);
 		 
 		 btnEdit.setOnClickListener(editbtnlistener);
-		 btnCancel.setOnClickListener(null);
+		 btnCancel.setOnClickListener(cancellistener);
 		 
 		 btn_selectPhoto.setOnClickListener(btnphotolistener);
 //		 btn_selectPhoto.setOnClickListener(new OnClickListener() {
@@ -171,6 +178,8 @@ public class EditPatient extends BaseFragment {
 		 
 		
 		imageLoader.displayImage(pimg, imguserphoto, options);//getResources().getString(R.string.url_base)
+		
+		new DownloadImage().execute(pimg);
 		 return view;
 	}
 	
@@ -206,6 +215,13 @@ public class EditPatient extends BaseFragment {
 		
 		
 	}// End of onCreate
+	
+	
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return super.onBackPressed();
+	}
 	
 	private void selectImage(){
 		
@@ -424,6 +440,16 @@ public class EditPatient extends BaseFragment {
 		}
 	};
 	
+	private OnClickListener cancellistener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			mActivity.deleteFile(f_name);
+			((AppMainFragmentActivity) getActivity()).popFragments();
+		}
+	};
+	
 		private OnClickListener editbtnlistener = new OnClickListener() {
 				
 				@Override
@@ -521,7 +547,7 @@ public class EditPatient extends BaseFragment {
 					String url_editPatient = mActivity.getResources().getString(R.string.url_base)+mActivity.getResources().getString(R.string.url_editpatient);
 					
 					
-					new AsynkTaskAddPatient().execute(url_editPatient,
+					new AsynkTaskEditPatient().execute(url_editPatient,
 														ApplicationActivity.getToken(),
 														str_uname,
 														str_Fname,
@@ -532,7 +558,8 @@ public class EditPatient extends BaseFragment {
 														str_mno,
 														str_Bday,
 														str_Gen,
-														pb_id);
+														pb_id,
+														path);
 				/*	if (!cd.isConnectingToInternet()) {
 						alert.showAlertDialog(getActivity(),
 								"Internet Connection Error",
@@ -553,7 +580,7 @@ public class EditPatient extends BaseFragment {
 			};
 			
 			
-			class AsynkTaskAddPatient extends AsyncTask<String,Void,String>{
+			class AsynkTaskEditPatient extends AsyncTask<String,Void,String>{
 				ProgressDialog pdialog = new ProgressDialog(mActivity);
 				String[] response = new String[2];
 				@Override
@@ -595,7 +622,7 @@ public class EditPatient extends BaseFragment {
 //					new AsynkTaskAddPatient().execute(url_addPatient,ApplicationActivity.getToken(),str_uname,strPass,str_Fname,str_Lname,str_Email,str_Add,str_Lno,str_mno,str_Bday,str_Gen);
 					
 					System.out.println("Edit Patient "+ "URL >> "+params[0]);
-					response = HttpApiCalling.EditPatient(params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11]);
+					response = HttpApiCalling.EditPatient(params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12]);
 					System.out.println("patient_list details" + response[0] + "   "
 							+ response[1]);
 
@@ -678,7 +705,13 @@ public class EditPatient extends BaseFragment {
 								//success
 								System.out.println("User is created");
 //								Toast.makeText(getActivity(), "Patient is created", Toast.LENGTH_LONG).show();
-								((AppMainFragmentActivity) getActivity()).popFragments();								 
+								((AppMainFragmentActivity) getActivity()).popFragments();	
+								
+								
+								//Remove file from internal storage
+								
+								mActivity.deleteFile(f_name);
+								
 							}
 							if(response[0].equalsIgnoreCase("400")){
 //								System.out.println(LOG_TAG+" >> "+s_msg);
@@ -931,4 +964,115 @@ public class EditPatient extends BaseFragment {
 			    }*/
 			 
 			
-}
+			 
+			 
+			// DownloadImage AsyncTask
+			    private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+			    	ProgressDialog mProgressDialog;
+			    	FileOutputStream fo;
+			        @Override
+			        protected void onPreExecute() {
+			            super.onPreExecute();
+			            // Create a progressdialog
+			            mProgressDialog = new ProgressDialog(mActivity);
+			            // Set progressdialog title
+			            mProgressDialog.setTitle("Download Image Tutorial");
+			            // Set progressdialog message
+			            mProgressDialog.setMessage("Loading...");
+			            mProgressDialog.setIndeterminate(false);
+			            // Show progressdialog
+			            mProgressDialog.show();
+			        }
+			 
+			        @Override
+			        protected Bitmap doInBackground(String... URL) {
+			 
+			            String imageURL = URL[0];
+			 
+			            Bitmap bitmap = null;
+			            try {
+			                // Download Image from URL
+			                InputStream input = new java.net.URL(imageURL).openStream();
+			                // Decode Bitmap
+			                bitmap = BitmapFactory.decodeStream(input);
+			            } catch (Exception e) {
+			                e.printStackTrace();
+			            }
+			            return bitmap;
+			        }
+			 
+			        @Override
+			        protected void onPostExecute(Bitmap result) {
+			            // Set the bitmap into ImageView
+//			            image.setImageBitmap(result);
+			            // Close progressdialog
+			            mProgressDialog.dismiss();
+			            
+/*			            try{
+			            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			            result.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+			            //you can create a new file name "test.jpg" in sdcard folder.
+			            File f = new File(Environment.getExternalStorageDirectory()
+			                                    + File.separator + f_name+".jpg");
+			            f.createNewFile();
+			            //write the bytes in file
+			            fo = new FileOutputStream(f);
+			            fo.write(bytes.toByteArray());
+			            }catch(Exception e){}
+			            finally{
+			            // remember close de FileOutput
+			            try {
+							fo.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
+			            
+			            
+			            try {
+					        // Use the compress method on the Bitmap object to write image to
+					        // the OutputStream
+			            		            	
+			            	
+					        FileOutputStream fos =
+					        		mActivity.openFileOutput(f_name, Context.MODE_PRIVATE);
+
+					        // Writing the bitmap to the output stream
+					       
+					        result.compress(Bitmap.CompressFormat.JPEG, 40, fos);
+					        
+					        fos.close();					       
+					        } catch (Exception e) {
+					        Log.e("saveToInternalStorage()", e.getMessage());
+					       
+					        } 
+			            
+			            path = "/data/data/com.example.uclinix/files/"+f_name;
+			            
+			            
+			            }
+			        }//End of Async Class
+			    
+			    
+			    
+			    }//End of Main Class	
+			    
+			    
+/*			    public boolean saveImageToInternalStorage(Bitmap image) {
+
+			        try {
+			        // Use the compress method on the Bitmap object to write image to
+			        // the OutputStream
+			        FileOutputStream fos = openFileOutput("desiredFilename.png", Context.MODE_PRIVATE);
+
+			        // Writing the bitmap to the output stream
+			        image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			        fos.close();
+
+			        return true;
+			        } catch (Exception e) {
+			        Log.e("saveToInternalStorage()", e.getMessage());
+			        return false;
+			        }*/
+
